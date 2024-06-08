@@ -1,0 +1,15 @@
+{
+    "nodes": [
+      {"id": 0, "name": "Alice", "x": 100, "y": 150, "size": 3},
+      {"id": 1, "name": "Bob", "x": -200, "y": 50, "size": 5},
+      {"id": 2, "name": "Charlie", "x": 300, "y": -100, "size": 4},
+      {"id": 3, "name": "Sven", "x": 500, "y": -160, "size": 4},
+      {"id": 4, "name": "Merel", "x": 600, "y": -150, "size": 3}
+    ],
+    "connections": [
+      {"source": 0, "target": 1, "distance": 200},
+      {"source": 1, "target": 2, "distance": 150},
+      {"source": 3, "target": 4, "distance": 250}
+    ]
+  }
+  
