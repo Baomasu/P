@@ -53,11 +53,11 @@ function setup() {
   displayGraphics.rectMode(CENTER);
 
   // Initialize nodes from JSON
-  jsonData.nodes.forEach(nodeData => {
-    let pos = createVector(nodeData.x, nodeData.y);
-    let node = new Node(pos, nodeData.size, nodeData.name); // Pass the name to the Node constructor
-    nodes.push(node);
-  });
+  //jsonData.nodes.forEach(nodeData => {
+  //  let pos = createVector(nodeData.x, nodeData.y);
+  //  let node = new Node(pos, nodeData.size, nodeData.name); // Pass the name to the Node constructor
+  //  nodes.push(node);
+  //});
 
 
   let node = new Node(createVector(0, 0), random(1, 5));
@@ -68,34 +68,28 @@ function setup() {
   closeNode = node;
 }
 
-function addNode() {
-  let i = round(random(nodes.length - 1))
-  let node1 = nodes[i];
-  let j = nodes.length
-  let l = random(minConnectionLength, maxConnectionLength)
-  let a = random(TWO_PI)
-  let pos = createVector(node1.pos.x + l / 10 * cos(a), node1.pos.y + l / 10 * sin(a))
-  let mass = random(1, 5)
-  let node2 = new Node(pos, mass)
-  nodes.push(node2)
-  if (random() < 0.8) { connections.push([i, j, l]) }
+function addNode(x, y, s) {
+  let l = random(minConnectionLength, maxConnectionLength);
+  let a = random(TWO_PI);
+  let pos = createVector(x + l / 1 * cos(a), y + l / 1 * sin(a));
+  let mass = s;
+  let node2 = new Node(pos, mass);
+  nodes.push(node2);
   for (let i = 0; i < round(node2.mass * particlesPerMass); i++) {
     particles.push(new Particle(node2));
   }
 }
 
-function addConnection() {
-  let i = round(random(nodes.length - 1))
-  let j = round(random(nodes.length - 1))
-  if (i != j) {
-    let l = random(minConnectionLength, maxConnectionLength)
-    connections.push([i, j, l])
-  }
+function addConnection(s,t,d) {
+  let i = s;
+  let j  = t;
+  let l = d;
+  connections.push([i, j, l])
 }
 
 function update() {
-  if (random() < 0.01) { addNode() }
-  if (random() < 0.001) { addConnection() }
+  //if (random() < 0.01) { addNode() }
+  //if (random() < 0.001) { addConnection() }
   applyForces()
   nodes.forEach(node => { node.update() });
   particles.forEach(particle => { particle.update() });
@@ -261,10 +255,10 @@ function applyForces() {
 
 class Node {
   constructor(pos, size) {
-    this.pos = pos
-    this.force = createVector(0, 0)
-    this.vel = createVector(0, 0)
-    this.mass = (2 * PI * size) / 1.5
+    this.pos = pos;
+    this.force = createVector(0, 0);
+    this.vel = createVector(0, 0);
+    this.mass = (2 * PI * size) / 1.5;
   }
 
   update() {
@@ -519,34 +513,39 @@ function initBtn() {
 
     if (match && isValid) {
       //"Both nicknames not saved."
-      let x1 = parseInt(random(-600, 600));
-      let y1 = parseInt(random(-600, 600));
-      let x2 = parseInt(random(-600, 600));
-      let y2 = parseInt(random(-600, 600));
+      let x1 = parseInt(random(-100, 100));
+      let y1 = parseInt(random(-100, 100));
+      let x2 = parseInt(random(-100, 100));
+      let y2 = parseInt(random(-100, 100));
+      let s1 = parseInt(random(1, 5));
+      let s2 = parseInt(random(1, 5));
+      let d = random(minConnectionLength, maxConnectionLength);
       jsonData.connections.push({
         "source": jsonData.nodes.length,
         "target": jsonData.nodes.length + 1,
-        "distance": parseInt(dist(x1, y1, x2, y2))
+        "distance": d
       });
       jsonData.nodes.push({
         "id": jsonData.nodes.length,
         "name": name1.value,
         "x": x1,
         "y": y1,
-        "size": parseInt(random(1, 5))
+        "size": s1
       });
+      addNode(x1, y1, s1);
       jsonData.nodes.push({
         "id": jsonData.nodes.length,
         "name": name2.value,
         "x": x2,
         "y": y2,
-        "size": parseInt(random(1, 5))
+        "size": s2
       });
+      addNode(x2, y2, s2);
+      addConnection(jsonData.nodes.length - 1, jsonData.nodes.length, d);
       match = false;
     }
 
     if (isValid) {
-
       insertForm.innerHTML = ``;
       toggle = false;
 
