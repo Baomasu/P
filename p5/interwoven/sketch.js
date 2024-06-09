@@ -80,9 +80,9 @@ function addNode(x, y, s) {
   }
 }
 
-function addConnection(s,t,d) {
+function addConnection(s, t, d) {
   let i = s;
-  let j  = t;
+  let j = t;
   let l = d;
   connections.push([i, j, l])
 }
@@ -463,11 +463,13 @@ function initBtn() {
             });
             if (match) {
               //"Both nicknames saved."
+              let d = random(minConnectionLength, maxConnectionLength);
               jsonData.connections.push({
                 "source": m.id,
                 "target": n.id,
-                "distance": parseInt(dist(m.x, m.y, n.x, n.y))
+                "distance": d
               });
+              addConnection(m.id + 1, n.id + 1, d);
               match = false;
             }
           }
@@ -476,37 +478,45 @@ function initBtn() {
 
       if (n.name == name1.value && match) {
         //"Only nickname 1 saved."
-        let x2 = parseInt(random(-600, 600));
-        let y2 = parseInt(random(-600, 600));
+        let x2 = parseInt(random(-100, 100));
+        let y2 = parseInt(random(-100, 100));
+        let s2 = parseInt(random(1, 5));
+        let d = random(minConnectionLength, maxConnectionLength);
         jsonData.connections.push({
           "source": n.id,
           "target": jsonData.nodes.length,
-          "distance": parseInt(dist(n.x, n.y, x2, y2))
+          "distance": d
         });
         jsonData.nodes.push({
           "id": jsonData.nodes.length,
           "name": name2.value,
           "x": x2,
           "y": y2,
-          "size": parseInt(random(1, 5))
+          "size": s2
         });
+        addNode(x2, y2, s2);
+        addConnection(n.id + 1, jsonData.nodes.length, d);
         match = false;
       } else if (n.name == name2.value && match) {
         //"Only nickname input 2 saved."
-        let x1 = parseInt(random(-600, 600));
-        let y1 = parseInt(random(-600, 600));
+        let x1 = parseInt(random(-100, 100));
+        let y1 = parseInt(random(-100, 100));
+        let s1 = parseInt(random(1, 5));
+        let d = random(minConnectionLength, maxConnectionLength);
         jsonData.connections.push({
           "source": jsonData.nodes.length,
           "target": n.id,
-          "distance": parseInt(dist(x1, y1, n.x, n.y))
+          "distance": d
         });
         jsonData.nodes.push({
           "id": jsonData.nodes.length,
           "name": name1.value,
           "x": x1,
           "y": y1,
-          "size": parseInt(random(1, 5))
+          "size": s1
         });
+        addNode(x1, y1, s1);
+        addConnection(jsonData.nodes.length, n.id + 1, d);
         match = false;
       }
     });
