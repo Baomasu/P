@@ -63,7 +63,7 @@ function setup() {
   let node = new Node(createVector(0, 0), random(1, 5));
   nodes.push(node);
   for (let i = 0; i < round(node.mass * particlesPerMass); i++) {
-    particles.push(new Particle(node));
+    //particles.push(new Particle(node));
   }
   closeNode = node;
 }
@@ -430,11 +430,13 @@ function initBtn() {
             });
             if (match) {
               //"Both nicknames saved."
+              let d = random(minConnectionLength, maxConnectionLength);
               jsonData.connections.push({
                 "source": n.id,
                 "target": m.id,
                 "distance": parseInt(dist(n.x, n.y, m.x, m.y))
               });
+              addConnection(n.id+1, m.id+1, d);
               match = false;
             }
           }
@@ -469,7 +471,7 @@ function initBtn() {
                 "target": n.id,
                 "distance": d
               });
-              addConnection(m.id + 1, n.id + 1, d);
+              addConnection(m.id+1, n.id+1, d);
               match = false;
             }
           }
@@ -495,7 +497,7 @@ function initBtn() {
           "size": s2
         });
         addNode(x2, y2, s2);
-        addConnection(n.id + 1, jsonData.nodes.length, d);
+        addConnection(n.id+1, jsonData.nodes.length, d);
         match = false;
       } else if (n.name == name2.value && match) {
         //"Only nickname input 2 saved."
@@ -516,7 +518,7 @@ function initBtn() {
           "size": s1
         });
         addNode(x1, y1, s1);
-        addConnection(jsonData.nodes.length, n.id + 1, d);
+        addConnection(jsonData.nodes.length, n.id+1, d);
         match = false;
       }
     });
